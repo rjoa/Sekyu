@@ -46,6 +46,6 @@ _figure 7. Content of AN93585.tmp_
 The decoded string is the backdoor, written in PowerShell. It uses Google Drive as its C&C server. It does this by listing files in a specific Drive folder and searching for any with the "text/plain" mime type. If it finds one, it downloads that file and saves it to `C:\programdata\tmps4.ps1`{: .filepath}. This downloaded script is then executed using the line `powershell -ep bypass -f $tmpz 2>&1`, where $tmpz contains the path to the script, and it uses 2>&1 to redirect any errors from stderr to stdout. The output is then saved to a temporary file stored in **C:\programdata\** and uploaded to the C&C server (Google Drive).
 
 ![img-description](/images/2025-04-05/9.png)
-_figure 7. Backdoor Routine_
+_figure 8. Backdoor Routine_
 
 It's getting more common to see malware using popular sites like Dropbox and Google Drive to hide its tracks. By mixing malicious communication in with everyday traffic to these services, the malware becomes harder to spot and avoids raising immediate red flags.
