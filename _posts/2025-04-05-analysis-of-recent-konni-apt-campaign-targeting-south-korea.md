@@ -7,7 +7,7 @@ categories: [Cyber Security, Malware Analysis]
 
 As I was scrolling through Twitter/X yesterday, I saw a post about an ongoing campaign by the Konni APT group. Since I dont have anything better to do and my curiousity got the best of me, I decided to take a look :D.
 
-Upon searching the hash from the post into VirusTotal, the initial file is a Microsoft shortcut (.LNK). To trick users into thinking that the it is Hanword document file, it used the double extension **".hwp.lnk"**. The usage of *".hwp"* strongly suggests that this is targeted towards those in South Korea. If you're not familiar with HWP, it's a document format for Hangul Word Processor – think of it like South Korea's Microsoft Word's .doc or .docx files. Taking a quick look at the LNK revealed that it contnains two scripts. One javascript and the other one is a PowerShell script. When the the LNK is executed, it will execute the javascript first.
+Upon searching the hash from the post into VirusTotal, the initial file is a Microsoft shortcut (.LNK). To trick users into thinking that the it is Hanword document file, it used the double extension **".hwp.lnk"**. The usage of *".hwp"* strongly suggests that this is targeted towards those in South Korea. If you're not familiar with HWP, it's a document format for Hangul Word Processor – think of it like South Korea's Microsoft Word's .doc or .docx files. Taking a quick look at the LNK revealed that it contnains two scripts. One javascript and the other one is a PowerShell script.
 
 ![img-description](/images/2025-04-05/1.png)
 _figure 1. Content of LNK file when viewed opened on a hex viewer_
@@ -43,7 +43,7 @@ The backdoor code is obfuscated using Base64 and is only assembled and decoded b
 ![img-description](/images/2025-04-05/7.png)
 _figure 7. Content of AN93585.tmp_
 
-The decoded string is the backdoor, written in PowerShell. It uses Google Drive as its C&C server. It does this by listing files in a specific Drive folder and searching for any with the "text/plain" mime type. If it finds one, it downloads that file and saves it to `C:\programdata\tmps4.ps1`{: .filepath}. This downloaded script is then executed using the line `powershell -ep bypass -f $tmpz 2>&1`, where $tmpz contains the path to the script, and it uses 2>&1 to redirect any errors from stderr to stdout. The output is then saved to a temporary file stored in **C:\programdata\** and uploaded to the C&C server (Google Drive).
+The decoded string is the backdoor, written in PowerShell. It uses Google Drive as its C&C server. It does this by listing files in a specific Drive folder and searching for any with the "text/plain" mime type. If it finds one, it downloads that file and saves it to `C:\programdata\tmps4.ps1`{: .filepath}. This downloaded script is then executed using the line `powershell -ep bypass -f $tmpz 2>&1`, where $tmpz contains the backdoor command, and it uses 2>&1 to redirect any errors from stderr to stdout. The output is then saved to a temporary file stored in **C:\programdata\** and uploaded to the C&C server (Google Drive).
 
 ![img-description](/images/2025-04-05/9.png)
 _figure 8. Backdoor Routine_
